@@ -1,0 +1,111 @@
+#include <stdio.h>
+
+struct Calculation {
+    double a;
+    double b;
+    double result;
+    char operation;
+};
+
+int main() {
+    struct Calculation history[100];
+    int choice, count = 0;
+    double a, b, result;
+
+    do {
+        printf("\n========== CALCULATOR ==========\n");
+        printf("1. Addition\n");
+        printf("2. Subtraction\n");
+        printf("3. Multiplication\n");
+        printf("4. Division\n");
+        printf("5. Show Calculation History\n");
+        printf("6. Exit\n");
+        printf("================================\n");
+
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input!\n");
+            return 1;
+        }
+
+        if (choice >= 1 && choice <= 4) {
+            printf("Enter first number: ");
+            if (scanf("%lf", &a) != 1) {
+                printf("Invalid number!\n");
+                return 1;
+            }
+
+            printf("Enter second number: ");
+            if (scanf("%lf", &b) != 1) {
+                printf("Invalid number!\n");
+                return 1;
+            }
+
+            switch (choice) {
+                case 1:
+                    result = a + b;
+                    history[count].operation = '+';
+                    break;
+
+                case 2:
+                    result = a - b;
+                    history[count].operation = '-';
+                    break;
+
+                case 3:
+                    result = a * b;
+                    history[count].operation = '*';
+                    break;
+
+                case 4:
+                    if (b == 0) {
+                        printf("Error: Division by zero!\n");
+                        continue;
+                    }
+                    result = a / b;
+                    history[count].operation = '/';
+                    break;
+            }
+
+            printf("Result: %.2f\n", result);
+
+            if (count < 100) {
+                history[count].a = a;
+                history[count].b = b;
+                history[count].result = result;
+                count++;
+            } else {
+                printf("History is full!\n");
+            }
+        }
+
+        else if (choice == 5) {
+            if (count == 0) {
+                printf("No calculations stored yet.\n");
+            } else {
+                printf("\n======= CALCULATION HISTORY =======\n");
+
+                for (int i = 0; i < count; i++) {
+                    printf("%d. %.2f %c %.2f = %.2f\n",
+                           i + 1,
+                           history[i].a,
+                           history[i].operation,
+                           history[i].b,
+                           history[i].result);
+                }
+            }
+        }
+
+        else if (choice == 6) {
+            printf("Thank you for using the calculator!\n");
+        }
+
+        else {
+            printf("Invalid choice! Please select 1 to 6.\n");
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
